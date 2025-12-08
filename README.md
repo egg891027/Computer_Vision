@@ -1,6 +1,6 @@
 # Computer-Vision
 
-Note: (請在執行程式前，將資料集資料夾 faces_256x256/ 放置於專案根目錄。)
+Note: (請在執行程式前，將資料集資料夾 faces_256x256/ 以及驗證影片 vlog.mp4 放置於專案根目錄。)
 ## 📌 Project Overview 
 本專案旨在解決 **通用模型 (General Model)** 在特定族群（台灣人臉）上的 **領域偏移 (Domain Shift)** 問題。
 
@@ -21,7 +21,8 @@ Note: (請在執行程式前，將資料集資料夾 faces_256x256/ 放置於專
 ├── README.md            
 ├── src/                 
 │   ├── CV_image.py      
-│   ├── CV_video.py      
+│   ├── CV_video.py 
+│   ├── CV_live_demo.py        
 └── results/            
     ├── confusion_matrix.png
     ├── loss & accuracy_curve.png
@@ -59,6 +60,13 @@ python src/CV_video.py
 
 輸出：分析後的影片將存為 results/output_result.mp4。
 
+3. 即時偵測 (Live Demo)
+啟動 Webcam 進行即時情緒辨識，包含防閃爍 (Temporal Smoothing) 功能。
+```text
+Bash
+
+python src/CV_live_demo.py
+```
 
 ## 📊 Results & Analysis
 1.Model Performance:
