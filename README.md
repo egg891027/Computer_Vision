@@ -1,112 +1,92 @@
 # Computer-Vision
 
-Read me first before using this database
-
-The information for the Image_Info.xls
-Column A: file_name: The file name of the image.
-Column B: Self_evaluate: The self-evaluated intensity by the performer.
-Column C: Observer_Count: Number of participants that rated this image.
-Column D: maxIntCategory: The emotion category of this image based on the greatest intensity rated by the participants. 1: happy; 2: sad; 3: Angry; 4: disgusted; 5: fearful; 6: surprised.  
-Column E: maxInt: The rated intensity in "maxIntCategory".  
-Column F: EntropyVal: The entropy (inter-participant variability) of this image. 
-Column G-L: counterMax: Proportion of participants that rated the image in this category.
-Column M-R: entropyVal: Entropy computed from "counterMax".		
-Column S-X: intVal: averaged intensity given by the observer in this category
-
-The filename naming convention 
-
-The first 2 digits: Performers' ID (from 01 to 30).
-The 3rd digit:  Performance type 1: Theatric performamce; 2: Ekman's FACS criteria; 3: Personal event.
-The 4th digit:  View point: 1: Front-view; 2: 3/4-view; 3: Profile-view.
-the 5th digit(English letter): Type of expression performed: a: Calm/Netural; b: Happy; c: Sad; d: Angry; e: Disgusted; f: Fearful; g: Surprised.
-The last 2 digits: serial number.
-
-# Emotion Recognition on Taiwanese Faces with ConvNeXt
-
 ## 📌 Project Overview (專案簡介)
 本專案旨在解決 **通用模型 (General Model)** 在特定族群（台灣人臉）上的 **領域偏移 (Domain Shift)** 問題。
 
 原生的 DeepFace 模型在台灣人臉資料集上僅有 **40%** 的準確率。透過引入 SOTA 模型 **ConvNeXt Base** 並採用 **One-Stage 全解凍訓練 (Full Unfreeze)** 策略，我們成功將準確率提升至 **98.37%**，證明了針對特定場景進行微調 (Fine-tuning) 的必要性。
 
 ## 🚀 Key Features (技術亮點)
-* **SOTA Model**: 使用 **ConvNeXt Base** 取代傳統的 ResNet/VGG，具備更強的特徵提取能力。
+* **SOTA Model**: 使用 **ConvNeXt Base** 整合原有的DeepFace模型，具備更強的特徵提取能力。
 * **Training Strategy**: 
-    * **One-Stage Training**: 不凍結骨幹，全網路參數同步更新，讓大模型完全適應小資料集。
+    * **One-Stage Training**: 不凍結權重，全網路參數同步更新，讓大模型完全適應小資料集。
     * **Cosine Annealing**: 使用餘弦退火調整學習率 (1e-4 $\to$ 1e-6)，精確收斂。
     * **Strong Regularization**: 設定 `Weight Decay = 0.05` 與 `RandomErasing`，有效防止過擬合 (Overfitting)。
-* **Robustness**: 在驗證集上達到 **98.37% Accuracy**，大幅改善了 Fear (恐懼) 的辨識率。
+* **Robustness**: 在驗證集上達到 **98.37% Accuracy**，大幅改善了某些情緒的recall、precision。
 
 ## 📂 Project Structure (檔案結構)
 ```text
 .
-├── requirements.txt     # 依賴套件清單
-├── convnext_best.pth    # 訓練好的最佳模型權重 (Accuracy: 98.37%)
-├── README.md            # 專案說明文件
-├── src/                 # 原始碼
-│   ├── CV_image.py      # 模型訓練與靜態圖片評估 (含錯誤分析繪圖)
-│   ├── CV_video.py      # 影片檔案分析 (針對 vlog.mp4)
-│   └── live_demo.py     # Webcam 即時情緒偵測 (含防閃爍機制)
-└── results/             # 分析結果圖表
+├── requirements.txt     
+├── README.md            
+├── src/                 
+│   ├── CV_image.py      
+│   ├── CV_video.py      
+└── results/            
     ├── confusion_matrix.png
-    ├── loss_curve.png
+    ├── loss & accuracy_curve.png
     ├── error_analysis.png
-    └── vlog_output.mp4
+    └── output_result.mp4
+```
 
-⚙️ Installation (安裝教學)
+## ⚙️ Installation (安裝教學)
 建議使用 Python 3.8+ 環境：
-
+```text
 Bash
 
 # 安裝必要套件
 pip install -r requirements.txt
 (註：若有 GPU，請確保 PyTorch 版本支援 CUDA 以加速訓練)
+```
 
-💻 Usage (使用說明)
+## 💻 Usage (使用說明)
 1. 訓練與評估 (Training & Evaluation)
-執行此指令可重新訓練模型，或載入 convnext_best.pth 產生混淆矩陣與錯誤分析圖。結果將自動儲存至 results/。
-
+執行此指令可重新訓練模型，產生loss & accuracy curve、confusion matrix與err analysis的結果圖。接著儲存至 results/。
+```text
 Bash
 
 python src/CV_image.py
+```
+
 2. 影片分析 (Video Analysis)
 針對指定的影片檔（如郭婞淳訪談 vlog.mp4）進行情緒分析。
-
+```text
 Bash
 
 python src/CV_video.py
+```
 輸入：預設讀取根目錄下的 vlog.mp4。
 
-輸出：分析後的影片將存為 results/vlog_output.mp4。
+輸出：分析後的影片將存為 results/output_result.mp4。
 
-3. 即時偵測 (Live Demo)
-啟動 Webcam 進行即時情緒辨識，包含防閃爍 (Temporal Smoothing) 功能。
 
-Bash
+## 📊 Results & Analysis (成果分析)
+1.Model Performance:
+Accuracy = 98.37% (大幅優於 Baseline 40% (only DeepFace))
 
-python src/live_demo.py
-操作：按 q 鍵離開。
+2.Loss & Accuracy Curve: 
+從圖表中可見，訓練曲線（藍色）與驗證曲線（橘色）呈現同步收斂的趨勢，兩者之間沒有出現明顯的差距（Divergence）。這證明了我們設定的 `Weight Decay=0.05` 成功抑制了模型過擬合 (Overfitting) 的現象。
+![Loss Curve](results/loss_curve.png)
 
-📊 Results & Analysis (成果分析)
-1. Model Performance
-Accuracy: 98.37% (大幅優於 Baseline 40%)
+3.混淆矩陣 (Confusion Matrix): 
+模型在特徵明顯的離散情緒（如 `Happy`, `Sad`, `Angry`）上展現了近乎完美的分類能力。值得注意的是，通常被視為最難辨識的 Fear 類別，其 Recall (召回率) 達到了 **94%**，這歸功於強力的 **資料增強 (Data Augmentaion)** 策略。
+![Confusion Matrix](results/confusion_matrix.png)
 
-Loss Curve: 訓練 Loss 與驗證 Loss 同步下降，未出現明顯過擬合，證明 Weight Decay 策略有效。
+4.錯誤案例分析 (Error Analysis):
+我們針對剩餘 **1.63%** 的預測錯誤案例進行了深入分析。結果發現，絕大多數的錯誤源於 **標註雜訊 (Label Noise)** 或 **模糊不清的表情 (Ambiguous Expressions)**（例如一張臉同時具備驚訝與恐懼的特徵）。在這些案例中，模型的預測機率通常呈現分散狀態（High Entropy），顯示出其對該影像的不確定性。
+![Error Analysis](results/error_analysis.png)
 
-Confusion Matrix: 在 Happy, Sad, Angry 等類別達到近乎 100% 的辨識率；Fear 的 Recall 提升至 0.94。
+## Case Study: Tears of Joy (郭婞淳影片分析)
+我們選用了奧運金牌得主郭婞淳的 Vlog 影片進行測試，以評估模型在 **動態真實場景** 中的泛化能力。
 
-2. Case Study: Tears of Joy (郭婞淳影片分析)
-在分析 vlog.mp4 時，模型傾向將 「喜極而泣」 的表情判讀為 Disgust (厭惡) 或 Sad (悲傷)。
+### 1. 觀察現象 (The Phenomenon)
+在影片中「喜極而泣」的片段，模型傾向於將情緒持續歸類為 **`Disgust` (厭惡)** 、 **`Fear` (恐懼)** 或 **`Sad` (悲傷)**，而非我們預期的 **`Happy` (開心)**。
 
-觀察現象：
+### 2. 關鍵洞察 (Critical Insight)
+* **視覺特徵的歧義性 (Visual Ambiguity)**：
+    當人物在激動說話或強忍淚水時，面部伴隨的 **「皺鼻 (Nose Wrinkling)」** 與 **「上唇上提 (Lip Raising)」** 動作，在幾何像素特徵上與「厭惡」表情高度重疊，導致模型誤判。
+* **單一標籤的限制 (Single-Label Limitation)**：
+    現有的 Cross-Entropy 損失函數強迫模型進行「互斥」分類。面對「喜極而泣」這種 **複合情緒 (Compound Emotions)**，模型無法同時輸出 `Happy` 與 `Sad`，只能被迫選擇特徵較為強烈的負面情緒。
+* **結論**：
+    這凸顯了現有 7 分類模型在處理複雜人類情感時的局限性。未來的改進方向可引入 **多標籤分類 (Multi-Label Classification)** 或定義如「驚喜 (Happily Surprised) = 驚喜 + 開心」等複合類別。
 
-模型對於說話時的鼻部皺縮特徵非常敏感，容易將其歸類為 Disgust。
-
-當淚水與悲傷特徵強烈時，快樂特徵被掩蓋。
-
-原因分析：
-
-視覺特徵重疊：說話時的肌肉牽動與強忍淚水的表情，在幾何特徵上與 Disgust 高度相似。
-
-單一標籤限制 (Single-Label)：現有 Cross-Entropy 分類器無法處理 複合情緒 (Compound Emotions)，導致模型無法同時輸出 Happy + Sad。
-
-結論：這顯示了從靜態圖片遷移至動態真實場景 (In-the-wild) 時的挑戰，未來可引入多模態 (Multimodal) 分析來解決此問題。
+*(分析結果影片已儲存於 `results/vlog_output.mp4`)*

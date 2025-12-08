@@ -19,7 +19,7 @@ OUTPUT_PATH = os.path.join(RESULTS_DIR, 'output_result.mp4')
 print(OUTPUT_PATH)
 
 # 參數設定
-WINDOW_SIZE = 5  # 平滑窗口：看過去 5 張圖來投票 (數字越大越穩，但反應越慢)
+WINDOW_SIZE = 12  # 平滑窗口：看過去 12 張圖來投票 (數字越大越穩，但反應越慢)
 emotion_history = deque(maxlen=WINDOW_SIZE) # 儲存最近 N 次的情緒
 confidence_history = deque(maxlen=WINDOW_SIZE) # 儲存最近 N 次的信心度
 
