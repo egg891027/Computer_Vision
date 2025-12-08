@@ -1,5 +1,6 @@
 # Computer-Vision
 
+Note: (請在執行程式前，將資料集資料夾 faces_256x256/ 放置於專案根目錄。)
 ## 📌 Project Overview 
 本專案旨在解決 **通用模型 (General Model)** 在特定族群（台灣人臉）上的 **領域偏移 (Domain Shift)** 問題。
 
@@ -76,7 +77,7 @@ Accuracy = 98.37% (大幅優於 Baseline 40% (only DeepFace))
 ![Error Analysis](results/error_analysis.png)
 
 ## Case Study: Tears of Joy (郭婞淳影片分析)
-我選用了奧運金牌得主郭婞淳的 Vlog 影片進行測試，以評估模型在 **動態真實場景** 中的泛化能力。
+我選用了奧運金牌得主郭婞淳的 Vlog 影片 `(vlog.mp4)` 進行測試，以評估模型在 **動態真實場景** 中的泛化能力。
 
 ### 1. 觀察現象 (The Phenomenon)
 在影片中「喜極而泣」的片段，模型傾向於將情緒持續歸類為 **`Disgust` (厭惡)** 、 **`Fear` (恐懼)** 或 **`Sad` (悲傷)**，而非預期的 **`Happy` (開心)**。
