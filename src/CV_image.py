@@ -28,7 +28,7 @@ def set_seed(seed=42):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
-    print(f"✅ 已設定隨機種子 Seed = {seed}")
+    print(f"已設定隨機種子 Seed = {seed}")
 
 # ==========================================
 # 1. 參數設定
@@ -322,7 +322,7 @@ if __name__ == '__main__':
                     ax = plt.subplot(rows, cols, i+1)
                     plt.imshow(img)
                     
-                    info_text = f"True: {row['True']}\nPred: {row['Pred']}\n({row['Confidence']:.2%})"
+                    info_text = f"True: {row['True']}\nPred: {row['Pred']}\nConf: {row['Confidence']:.2%}"
                     if row['Confidence'] < 0.5:
                         text_color = 'red'   # 如果沒把握，設為紅色
                     else:
@@ -342,5 +342,53 @@ if __name__ == '__main__':
         plt.savefig(os.path.join(RESULTS_DIR, 'error_analysis.png'), bbox_inches='tight', dpi=300)
         print(f"正在顯示所有 {num_errors} 張錯誤圖片，請稍候...")
         plt.show()
+        
     else:
-        print("🎉 太完美了！測試集全部預測正確 (100% Accuracy)！")
+        print("太完美了！測試集全部預測正確 (100% Accuracy)！")
+        
+# ==========================================
+# 6. 成功案例展示
+# ==========================================    
+print("\n=== 正在儲存 success_cases.png===")
+
+correct_cases = df_res[df_res['Correct'] == True]
+unique_emotions = sorted(list(set(CLASSES)))
+num_emotions = len(unique_emotions)
+rows = 2
+cols = 5
+plt.figure(figsize=(20, 4 * rows))
+
+for i, emotion in enumerate(unique_emotions):
+    # 找出該情緒下，信心度最高的前 1 張
+    best_case = correct_cases[correct_cases['True'] == emotion].sort_values(by='Confidence', ascending=False).head(1)
+    
+    if not best_case.empty:
+        row = best_case.iloc[0]
+        img_full_path = os.path.join(DATA_DIR, row['Filename'])
+        
+        if os.path.exists(img_full_path):
+            img = cv2.imread(img_full_path)
+            if img is not None:
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                h, w, _ = img.shape
+                
+                # 建立子圖
+                ax = plt.subplot(rows, cols, i + 1)
+                plt.imshow(img)
+                
+                # --- 這裡使用您提供的邏輯 ---
+                info_text = f"True: {row['True']}\nPred: {row['Pred']}\nConf: {row['Confidence']:.2%}"
+                plt.text(w + 20, 20, info_text, 
+                         fontsize=13, color='black', 
+                         va='top', ha='left', fontweight='bold')
+                
+                plt.axis('off')
+
+plt.subplots_adjust(wspace=1.2, hspace=0.3)
+plt.suptitle(f"Top Success Cases per Emotion (Model Accuracy: {accuracy_score(y_true, y_pred):.2%})", fontsize=16, y=0.95)
+
+save_path_success = os.path.join(RESULTS_DIR, 'success_cases.png')
+plt.savefig(save_path_success, bbox_inches='tight', dpi=300)
+plt.show()
+
+print(f"已儲存成功案例圖: {save_path_success}")

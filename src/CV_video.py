@@ -19,7 +19,7 @@ OUTPUT_PATH = os.path.join(RESULTS_DIR, 'output_result.mp4')
 print(OUTPUT_PATH)
 
 # 參數設定
-WINDOW_SIZE = 12  # 平滑窗口：看過去 12 張圖來投票 (數字越大越穩，但反應越慢)
+WINDOW_SIZE = 5  # 平滑窗口：看過去 5 張圖來投票 (數字越大越穩，但反應越慢)
 emotion_history = deque(maxlen=WINDOW_SIZE) # 儲存最近 N 次的情緒
 confidence_history = deque(maxlen=WINDOW_SIZE) # 儲存最近 N 次的信心度
 
@@ -43,9 +43,9 @@ print("正在載入模型...")
 model = build_convnext(len(CLASSES))
 try:
     model.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
-    print("✅ 模型載入成功！")
+    print("模型載入成功！")
 except FileNotFoundError:
-    print(f"❌ 找不到權重檔: {MODEL_PATH}")
+    print(f"找不到權重檔: {MODEL_PATH}")
     exit()
 
 model.to(DEVICE)
@@ -65,7 +65,7 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 cap = cv2.VideoCapture(VIDEO_PATH)
 
 if not cap.isOpened():
-    print(f"❌ 無法開啟影片: {VIDEO_PATH}，請確認路徑是否正確。")
+    print(f"無法開啟影片: {VIDEO_PATH}，請確認路徑是否正確。")
     exit()
 
 # 取得影片資訊 (寬、高、FPS)
@@ -78,7 +78,7 @@ print(f"影片資訊: {width}x{height}, FPS: {fps}, 總幀數: {total_frames}")
 fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
 out = cv2.VideoWriter(OUTPUT_PATH, fourcc, fps, (width, height))
 if not out.isOpened():
-    print(f"❌ 無法建立影片檔案: {OUTPUT_PATH}，請檢查路徑或權限。")
+    print(f"無法建立影片檔案: {OUTPUT_PATH}，請檢查路徑或權限。")
     cap.release()
     cv2.destroyAllWindows()
     exit()
@@ -149,4 +149,4 @@ cap.release()
 out.release()
 cv2.destroyAllWindows()
 
-print(f"\n✅ 分析完成！結果已儲存為: {os.path.join(RESULTS_DIR, 'output_result.mp4')}")
+print(f"\n分析完成！結果已儲存為: {os.path.join(RESULTS_DIR, 'output_result.mp4')}")

@@ -18,7 +18,7 @@ project_root = os.path.dirname(src_dir)
 MODEL_PATH = os.path.join(project_root, 'convnext_best.pth')
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-WINDOW_SIZE = 12  # 平滑窗口：看過去 12 幀的結果來投票 (數值越大越穩，但反應越慢)
+WINDOW_SIZE = 5  # 平滑窗口：看過去 5 幀的結果來投票 (數值越大越穩，但反應越慢)
 
 # 情緒標籤 (需與訓練時順序一致)
 LABEL_MAP = ['neutral', 'happy', 'sad', 'angry', 'disgust', 'fear', 'surprise']
@@ -42,9 +42,9 @@ model = build_convnext(len(LABEL_MAP))
 
 if os.path.exists(MODEL_PATH):
     model.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
-    print(f"✅ 成功載入模型權重: {MODEL_PATH}")
+    print(f"成功載入模型權重: {MODEL_PATH}")
 else:
-    print(f"❌ 錯誤: 找不到權重檔 {MODEL_PATH}")
+    print(f"錯誤: 找不到權重檔 {MODEL_PATH}")
     print("請確認 convnext_best.pth 是否在專案根目錄中。")
     exit()
 
@@ -85,10 +85,10 @@ smoother = EmotionSmoother(window_size=WINDOW_SIZE)
 # ==========================================
 # 5. 開始即時偵測
 # ==========================================
-cap = cv2.VideoCapture(0) # 0 代表預設鏡頭
+cap = cv2.VideoCapture('http://192.168.76.249:4747/video')  # 替換為你的 IP Camera URL 或使用 0 來使用內建攝影機
 
 if not cap.isOpened():
-    print("❌ 無法開啟攝影機，請檢查連接狀態。")
+    print("無法開啟攝影機，請檢查連接狀態。")
     exit()
 
 print("\n=== 啟動即時情緒偵測 (按 'q' 離開) ===")
