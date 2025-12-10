@@ -255,7 +255,7 @@ if __name__ == '__main__':
     plt.plot(history['val_acc'], label='Val Acc')
     plt.title('Accuracy History')
     plt.legend()
-    plt.savefig(os.path.join(RESULTS_DIR, 'loss & accuracy_curve.png'))
+    plt.savefig(os.path.join(RESULTS_DIR, 'loss-accuracy_curve.png'))
     plt.show()
 
 # ==========================================

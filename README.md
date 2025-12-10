@@ -79,10 +79,11 @@ python src/CV_live_demo.py
 ## 📊 Results & Analysis
 1.Model Performance:
 Accuracy = 98.37% (大幅優於 Baseline 40% (only DeepFace))
+![Classification Report](results/classification_report.png)
 
 2.Loss & Accuracy Curve: 
 從圖表中可見，訓練曲線（藍色）與驗證曲線（橘色）呈現同步收斂的趨勢，兩者之間沒有出現明顯的差距（Divergence）。這證明了設定的 `Weight Decay=0.05` 成功抑制了模型過擬合 (Overfitting) 的現象。
-![Loss Curve](results/loss & accuracy_curve.png)
+![Loss Curve](results/loss-accuracy_curve.png)
 
 3.混淆矩陣 (Confusion Matrix): 
 模型在特徵明顯的離散情緒（如 `Happy`, `Sad`, `Angry`）上展現了近乎完美的分類能力。值得注意的是，通常被視為最難辨識的 Fear 類別，其 Recall (召回率) 達到了 **97%**，這歸功於強力的 **資料增強 (Data Augmentaion)** 策略。
@@ -110,6 +111,5 @@ Accuracy = 98.37% (大幅優於 Baseline 40% (only DeepFace))
 
 ### 3. 結論
     這凸顯了現有 7 分類模型在處理複雜人類情感時的局限性。未來的改進方向可引入 **多標籤分類 (Multi-Label Classification)** 或定義如「驚喜 (Happily Surprised) = 驚喜 + 開心」等複合類別。
-![Output result](results/output_result.mp4)
 
 *(分析結果影片已儲存於 `results/output_result.mp4`)*
