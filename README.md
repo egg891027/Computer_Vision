@@ -109,7 +109,7 @@ Accuracy = 98.37% (大幅優於 Baseline 40% (only DeepFace))
 * **單一標籤的限制 (Single-Label Limitation)**：
     現有的 Cross-Entropy 損失函數強迫模型進行「互斥」分類。面對「喜極而泣」這種 **複合情緒 (Compound Emotions)**，模型無法同時輸出 `Happy` 與 `Sad`，只能被迫選擇特徵較為強烈的負面情緒。
 
-### 3. 結論
-    這凸顯了現有 7 分類模型在處理複雜人類情感時的局限性。未來的改進方向可引入 **多標籤分類 (Multi-Label Classification)** 或定義如「驚喜 (Happily Surprised) = 驚喜 + 開心」等複合類別。
+### 3. 結論 (Conclusion)
+這凸顯了現有 7 分類模型在處理複雜人類情感時的局限性。未來的改進方向可引入 **多標籤分類 (Multi-Label Classification)** 或定義如「驚喜 (Happily Surprised) = 驚喜 + 開心」等複合類別。
 
 *(分析結果影片已儲存於 `results/output_result.mp4`)*
