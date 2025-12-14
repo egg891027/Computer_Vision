@@ -141,10 +141,11 @@ Text: 正確判讀為 Happy (語義包含「感謝」、「接受」)。
     現有的 Cross-Entropy 損失函數強迫模型進行「互斥」分類。面對「喜極而泣」這種 **複合情緒 (Compound Emotions)**，模型無法同時輸出 `Happy` 與 `Sad`，只能被迫選擇特徵較為強烈的負面情緒。
 
 ### 3. 結論 (Conclusion)
-    本實驗證實了 Text (文字) 模態在複雜情緒辨識中扮演了 「語義錨點 (Semantic Anchor)」 的關鍵角色。
+本實驗證實了 Text (文字) 模態在複雜情緒辨識中扮演了 **語義錨點 (Semantic Anchor)** 的關鍵角色。
 
-Visual & Audio 傾向捕捉 「生理反應」 (Physiological Response)，例如哭泣的臉與顫抖的聲音，因此容易將「激動的喜悅」誤判為負面情緒（如 Sad 或 Fear）。
-
-Text 則能直接反映 「心理意圖」 (Cognitive Intent)，在 Visual/Audio 失準時提供了正確的情緒定位。
-
-Future Work: 未來的改進方向可引入 Attention Mechanism (注意力機制) 來自動分配不同模態的權重，或定義如「喜極而泣 (Tears of Joy)」這類的 複合情緒標籤。。
+* **Visual & Audio**: 
+    傾向捕捉 「生理反應」 (Physiological Response)，例如哭泣的臉與顫抖的聲音，因此容易將「激動的喜悅」誤判為負面情緒（如 Sad 或 Fear）。
+* **Text**: 
+    則能直接反映 「心理意圖」 (Cognitive Intent)，在 Visual/Audio 失準時提供了正確的情緒定位。
+* **Future Work**: 
+    未來的改進方向可引入 Attention Mechanism (注意力機制) 來自動分配不同模態的權重，或定義如「喜極而泣 (Tears of Joy)」這類的 複合情緒標籤。。
