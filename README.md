@@ -99,6 +99,7 @@ python src/CV_multimodel.py
 輸入影片：預設讀取根目錄下的 vlog.mp4。
 
 輸出影片：分析後的影片將存為 results/output_result.mp4。
+
 輸出報告：分析後的整合報告將存為 results/final_analysis_integrated.csv。
 
 ## 📊 Results & Analysis
@@ -143,5 +144,7 @@ Text: 正確判讀為 Happy (語義包含「感謝」、「接受」)。
     本實驗證實了 Text (文字) 模態在複雜情緒辨識中扮演了 「語義錨點 (Semantic Anchor)」 的關鍵角色。
 
 Visual & Audio 傾向捕捉 「生理反應」 (Physiological Response)，例如哭泣的臉與顫抖的聲音，因此容易將「激動的喜悅」誤判為負面情緒（如 Sad 或 Fear）。
+
 Text 則能直接反映 「心理意圖」 (Cognitive Intent)，在 Visual/Audio 失準時提供了正確的情緒定位。
+
 Future Work: 未來的改進方向可引入 Attention Mechanism (注意力機制) 來自動分配不同模態的權重，或定義如「喜極而泣 (Tears of Joy)」這類的 複合情緒標籤。。
